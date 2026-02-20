@@ -1,0 +1,26 @@
+#!/data/data/com.termux/files/usr/bin/bash
+REPO_DIR="$HOME/meu-repo-dandelion"
+cd $REPO_DIR
+
+echo "🔧 Ajustando permissões e limpando..."
+# Corrige as permissões de todas as pastas DEBIAN de uma vez
+find . -type d -name "DEBIAN" -exec chmod 755 {} +
+
+echo "📦 Gerando pacotes .deb..."
+for dir in */; do
+    if [ -d "$dir/DEBIAN" ]; then
+        dpkg-deb --build "${dir%/}"
+    fi
+done
+
+echo "📑 Atualizando índice do repositório..."
+dpkg-scanpackages . /dev/null > Packages
+bzip2 -c Packages > Packages.bz2
+
+echo "🚀 Subindo para o GitHub..."
+git add .
+git commit -m "Update Dandelion Repo: $(date +%d/%m/%Y-%H:%M)"
+git push origin main
+
+echo "✅ Tudo pronto! Seu repo está online."
+

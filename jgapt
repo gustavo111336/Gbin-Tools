@@ -1,0 +1,14 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# GAPT - Dandelion Database Reader
+
+DB="/data/data/com.termux/files/usr/var/lib/dpkg/status"
+
+if [ -z "$1" ]; then
+    echo "🦁 Dandelion GAPT: Informe o nome do pacote."
+    exit 1
+fi
+
+# Lógica pura: procura o bloco do pacote no arquivo de status
+# sem usar nenhum comando externo além do grep
+/data/data/com.termux/files/usr/bin/grep -A 12 "^Package: $1" "$DB"
+

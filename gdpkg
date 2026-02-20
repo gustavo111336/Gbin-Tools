@@ -1,0 +1,23 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# gdpkg - O coração do Dandelion
+# Manipulação direta via dpkg engine
+
+case $1 in
+    -i|--install)
+        # Instala um arquivo .deb local diretamente
+        dpkg --force-all -i "$2"
+        ;;
+    -l|--list)
+        # Lista arquivos dentro de um pacote instalado
+        dpkg-query -L "$2"
+        ;;
+    -s|--status)
+        # Mostra a saúde e versão do pacote no banco de dados real
+        dpkg-query -s "$2"
+        ;;
+    *)
+        echo "🦁 Dandelion gdpkg"
+        echo "Uso: gdpkg [-i arquivo.deb] [-l pacote] [-s pacote]"
+        ;;
+esac
+

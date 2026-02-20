@@ -1,0 +1,7 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# gpkg - Gestor de Binários Dandelion
+
+# Lista todos os pacotes instalados que você criou ou baixou
+echo "📋 Inventário Dandelion OS:"
+dpkg --get-selections | grep -v "deinstall"
+
