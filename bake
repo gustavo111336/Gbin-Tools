@@ -1,0 +1,46 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# 🦁 Dandelion BAKE - O Validador de Fermentação
+
+# Cores para o visual Dandelion
+G='\033[0;32m'
+R='\033[0;31m'
+Y='\033[0;33m'
+B='\033[0;34m'
+N='\033[0m'
+
+echo -e "${B}🍞 Dandelion Bake: Iniciando fornada...${N}"
+sleep 0.5
+
+# 1. Analisando o Trigo (Arquivos)
+echo -ne "${Y}🌾 Analisando o trigo...${N} "
+FILES_COUNT=$(ls -1 | wc -l)
+echo -e "($FILES_COUNT arquivos encontrados)"
+
+# 2. Adicionando Fermento (Permissões)
+echo -e "${Y}🧪 Adicionando fermento (chmod +x)...${N}"
+chmod +x *
+
+# 3. Verificando o Calor do Forno (Hardware via termux-api)
+DATA=$(termux-battery-status)
+PERC=$(echo "$DATA" | grep '"percentage":' | awk '{print $2}' | tr -d ',')
+TEMP=$(echo "$DATA" | grep '"temperature":' | awk '{print $2}' | tr -d ',')
+# Remove o decimal da temperatura para o IF não quebrar
+TEMP_INT=${TEMP%.*}
+
+echo -e "  🔋 Carga: ${G}$PERC%${N} | 🌡️ Calor: ${G}$TEMP°C${N}"
+
+# 4. Verificação de Segurança
+if [ -z "$PERC" ]; then
+    echo -e "${R}❌ ERRO: O forno não ligou (termux-api falhou).${N}"
+    exit 1
+fi
+
+if [ "$PERC" -lt 20 ]; then
+    echo -e "${R}⚠️  MASSA MURCHANDO! Bateria abaixo de 20%. Conecte o carregador.${N}"
+elif [ "$TEMP_INT" -gt 42 ]; then
+    echo -e "${R}🔥 FORNO MUITO QUENTE! $TEMP°C pode queimar os bits.${N}"
+else
+    echo -e "${G}✅ FERMENTAÇÃO PERFEITA. O bit assou e o display brilha!${N}"
+    echo -e "${B}🚀 Pronto para o deploy.${N}"
+fi
+
