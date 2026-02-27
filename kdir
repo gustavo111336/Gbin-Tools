@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# --- Configuração de Cores e Ícones ---
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # Sem cor
+
+# Ícones Nerd Font
+ICON_FOLDER=""
+ICON_SUCCESS=""
+ICON_ERROR=""
+ICON_WAIT="󱑮"
+
+# Função de ajuda
+usage() {
+    echo -e "${YELLOW}Uso:${NC} kdir <nome_da_pasta>"
+    echo -e "Exemplo: kdir projetos_2026"
+}
+
+# Verifica se um argumento foi passado
+if [ -z "$1" ]; then
+    usage
+    exit 1
+fi
+
+FOLDER_NAME=$1
+
+echo -e "${BLUE}${ICON_WAIT}  Criando diretório: ${FOLDER_NAME}...${NC}"
+
+# Simula um pequeno delay para o efeito visual (opcional)
+sleep 0.5
+
+# Verifica se a pasta já existe
+if [ -d "$FOLDER_NAME" ]; then
+    echo -e "${RED}${ICON_ERROR} Erro: A pasta '${FOLDER_NAME}' já existe aqui!${NC}"
+    exit 1
+fi
+
+# Cria a pasta e entra nela
+if mkdir -p "$FOLDER_NAME"; then
+    echo -e "---"
+    echo -e "${GREEN}${ICON_SUCCESS}  Sucesso!${NC}"
+    echo -e "${BLUE}${ICON_FOLDER}  Diretório:${NC} ${FOLDER_NAME}"
+    echo -e "${YELLOW}󰉋  Caminho:${NC} $(pwd)/$FOLDER_NAME"
+    echo -e "---"
+else
+    echo -e "${RED}${ICON_ERROR} Falha crítica ao criar o diretório.${NC}"
+    exit 1
+fi
+
